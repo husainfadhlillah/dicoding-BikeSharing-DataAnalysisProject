@@ -60,7 +60,7 @@ submission
 └───url.txt
 ```
 
-- File `hour_data_clean.csv` dan `day_data_clean.csv` harus berada di folder `main_data`.
+- File `hour_data_clean.csv` dan `day_data_clean.csv` harus berada di folder yang sama dengan file `dashboard.py`.
 - File `dashboard.py` adalah file utama yang berisi kode Streamlit.
 
 ---
@@ -133,6 +133,6 @@ Di sidebar dashboard, Anda dapat memfilter data berdasarkan:
 
 Jika Anda mengalami masalah saat menjalankan dashboard, pastikan:
 
-1. File CSV (`hour_data_clean.csv` dan `day_data_clean.csv`) ada di folder `main_data`.
+1. File CSV (`hour_data_clean.csv` dan `day_data_clean.csv`) di folder yang sama dengan file `dashboard.py`.
 2. Semua dependensi telah terinstall dengan benar.
 3. Anda menjalankan perintah `streamlit run dashboard.py` dari folder yang benar.
