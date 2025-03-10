@@ -9,9 +9,9 @@ import os
 # Set page configuration HARUS dipanggil pertama kali
 st.set_page_config(page_title="Bike Sharing Dashboard", layout="wide")
 
-# Debugging: Tampilkan direktori kerja dan file yang ada
-st.write("Current Working Directory:", os.getcwd())
-st.write("Files in current directory:", os.listdir())
+# Tampilkan direktori kerja dan file yang ada
+# st.write("Current Working Directory:", os.getcwd())
+# st.write("Files in current directory:", os.listdir())
 
 # Custom CSS untuk gradient background
 st.markdown(
