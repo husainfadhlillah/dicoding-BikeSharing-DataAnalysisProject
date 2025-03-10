@@ -6,12 +6,12 @@ import seaborn as sns
 import plotly.express as px
 import os 
 
-# Lihat direktori dan file yang tersedia
-st.write("Current working directory:", os.getcwd())
-st.write("Files in current directory:", os.listdir())
-
-# Set page configuration
+# Set page configuration HARUS dipanggil pertama kali
 st.set_page_config(page_title="Bike Sharing Dashboard", layout="wide")
+
+# Debugging: Tampilkan direktori kerja dan file yang ada
+st.write("Current Working Directory:", os.getcwd())
+st.write("Files in current directory:", os.listdir())
 
 # Custom CSS untuk gradient background
 st.markdown(
