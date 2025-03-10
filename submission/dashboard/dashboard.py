@@ -4,6 +4,11 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
 import plotly.express as px
+import os 
+
+# Lihat direktori dan file yang tersedia
+st.write("Current working directory:", os.getcwd())
+st.write("Files in current directory:", os.listdir())
 
 # Set page configuration
 st.set_page_config(page_title="Bike Sharing Dashboard", layout="wide")
@@ -24,8 +29,28 @@ st.markdown(
 # Load data
 @st.cache_data
 def load_data():
-    hour_data = pd.read_csv('hour_data_clean.csv')
-    day_data = pd.read_csv('day_data_clean.csv')
+    script_dir = os.path.dirname(os.path.abspath(__file__))
+    hour_data_path = os.path.join(script_dir, 'hour_data_clean.csv')
+    day_data_path = os.path.join(script_dir, 'day_data_clean.csv')
+    
+    # Debug info
+    st.write("Script directory:", script_dir)
+    st.write("Hour data path:", hour_data_path)
+    st.write("File exists:", os.path.exists(hour_data_path))
+    
+    # Coba beberapa alternatif jika file tidak ditemukan
+    if not os.path.exists(hour_data_path):
+        alt_path = os.path.join(script_dir, '..', 'data', 'hour.csv')
+        if os.path.exists(alt_path):
+            hour_data = pd.read_csv(alt_path)
+            day_data = pd.read_csv(os.path.join(script_dir, '..', 'data', 'day.csv'))
+            return hour_data, day_data
+        else:
+            st.error("File data tidak ditemukan. Silakan periksa repository GitHub Anda.")
+            st.stop()
+    
+    hour_data = pd.read_csv(hour_data_path)
+    day_data = pd.read_csv(day_data_path)
     return hour_data, day_data
 
 hour_data, day_data = load_data()
