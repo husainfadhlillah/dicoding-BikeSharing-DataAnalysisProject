@@ -45,13 +45,20 @@ pip install streamlit pandas matplotlib seaborn plotly scikit-learn
 Pastikan struktur folder Anda seperti ini:
 
 ```
-submission/
-├── main_data/
-│   ├── hour_data_clean.csv
-│   ├── day_data_clean.csv
-│
-├── dashboard.py
-├── README.md
+submission
+├───dashboard
+| ├───main_data
+| | ├───day_data_clean.csv
+| | └───hour_data_clean.csv
+| └───dashboard.py
+├───data
+| ├───day.csv
+| └───hour.csv
+├───notebook.ipynb
+├───rangkuman.txt
+├───README.md
+├───requirements.txt
+└───url.txt
 ```
 
 - File `hour_data_clean.csv` dan `day_data_clean.csv` harus berada di folder `main_data`.
