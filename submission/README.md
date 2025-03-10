@@ -47,9 +47,8 @@ Pastikan struktur folder Anda seperti ini:
 ```
 submission
 ├───dashboard
-| ├───main_data
-| | ├───day_data_clean.csv
-| | └───hour_data_clean.csv
+| ├───day_data_clean.csv
+| ├───hour_data_clean.csv
 | ├───requirements.txt
 | └───dashboard.py
 ├───data

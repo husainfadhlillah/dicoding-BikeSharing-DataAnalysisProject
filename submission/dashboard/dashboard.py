@@ -24,8 +24,8 @@ st.markdown(
 # Load data
 @st.cache_data
 def load_data():
-    hour_data = pd.read_csv('main_data/hour_data_clean.csv')
-    day_data = pd.read_csv('main_data/day_data_clean.csv')
+    hour_data = pd.read_csv('hour_data_clean.csv')
+    day_data = pd.read_csv('day_data_clean.csv')
     return hour_data, day_data
 
 hour_data, day_data = load_data()
