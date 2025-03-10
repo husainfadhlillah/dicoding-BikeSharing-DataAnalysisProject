@@ -1,0 +1,89 @@
+====================================================================
+                Rangkuman Insight Analisis Data Bike Sharing
+====================================================================
+
+----------------------------
+0. Pertanyaan
+----------------------------
+- Pertanyaan 1: Bagaimana pola penggunaan sepeda (bike sharing) berdasarkan faktor waktu (jam, hari, bulan, musim) dan faktor cuaca?
+
+- Pertanyaan 2: Apa perbedaan karakteristik antara pengguna casual dan registered, dan bagaimana ini dapat mempengaruhi strategi bisnis?
+
+----------------------------
+1. Gathering Data
+----------------------------
+- Struktur Dataset:
+  - Dataset hour: 17.379 baris, 17 kolom (data per jam).
+  - Dataset day: 731 baris, 16 kolom (data harian selama ~2 tahun).
+
+- Pola Penggunaan Sepeda:
+  - Penggunaan sepeda bervariasi berdasarkan waktu, dengan puncak pada jam 2 pagi (40 pengguna) dan penurunan setelahnya.
+  - Pengguna terdaftar (registered) mendominasi dibanding pengguna kasual (casual).
+
+- Faktor Cuaca:
+  - Cuaca cerah (weathersit=1) mendukung penggunaan sepeda, bahkan di malam hari.
+  - Suhu, kelembaban, dan kecepatan angin menunjukkan kondisi yang stabil.
+
+----------------------------
+2. Assessing Data
+----------------------------
+- Kelengkapan Data:
+  - Tidak ada missing values atau data duplikat pada kedua dataset.
+  - Data mencakup periode 2 tahun penuh (1 Januari 2011 - 31 Desember 2012).
+
+- Variabel Kategoris:
+  - Musim, tahun, bulan, jam, hari, dan kondisi cuaca memiliki nilai unik yang lengkap.
+  - Variabel waktu dan cuaca sangat relevan untuk analisis pola penggunaan.
+
+- Variabel Status Hari:
+  - Hari libur, hari kerja, dan akhir pekan memungkinkan analisis perbedaan perilaku pengguna.
+
+----------------------------
+3. Cleaning Data
+----------------------------
+- Transformasi Data:
+  - Kolom tanggal diubah ke format datetime.
+  - Kolom kategori numerik dikonversi ke label deskriptif (musim, bulan, hari, cuaca).
+  - Data cuaca didenormalisasi ke nilai aktual (suhu, kelembaban, kecepatan angin).
+
+- Perhitungan Proporsi Pengguna:
+  - Ditambahkan kolom proporsi pengguna casual dan registered.
+  - Total pengguna dihitung sebagai jumlah pengguna casual dan registered.
+
+----------------------------
+4. Exploratory Data Analysis (EDA)
+----------------------------
+- Pola Penggunaan Berdasarkan Jam:
+  - Pola bi-modal: puncak pagi (jam 8) dan sore (jam 17-18).
+  - Penggunaan terendah pada dini hari (jam 3-4).
+
+- Pengaruh Cuaca:
+  - Cuaca cerah (Clear/Few clouds) memiliki rata-rata penyewaan tertinggi (~205 unit).
+  - Cuaca buruk (Heavy Rain/Snow/Fog) memiliki penyewaan terendah (~75 unit).
+
+----------------------------
+5. Visualization & Explanatory Analysis
+----------------------------
+- Pola Penggunaan Sepeda (Heatmap):
+  - Pola "twin peaks" pada hari kerja (jam 8 dan 17-18).
+  - Distribusi lebih merata pada akhir pekan (Sabtu-Minggu).
+  - Penggunaan tertinggi pada jam sibuk dan Sabtu siang.
+
+- Perbedaan Pengguna Casual vs Registered:
+  - Pengguna registered mendominasi (81.2% dari total penyewaan).
+  - Pengguna casual hanya 18.8%, menunjukkan peluang pertumbuhan.
+
+- Clustering Pola Penggunaan:
+  - 3 cluster teridentifikasi: penggunaan rendah (dini hari), menengah (malam), dan tinggi (jam sibuk).
+  - Cluster penggunaan tinggi dominan pada jam 7-9 dan 16-19.
+
+----------------------------
+6. Kesimpulan
+----------------------------
+- Pertanyaan 1: Pola penggunaan sepeda dipengaruhi oleh waktu (jam, hari, bulan, musim) dan cuaca. Penggunaan tertinggi terjadi pada jam sibuk (pagi dan sore) serta pada cuaca cerah.
+  
+- Pertanyaan 2: Pengguna registered mendominasi (81.2%), sedangkan pengguna casual lebih aktif di akhir pekan. Terdapat peluang untuk meningkatkan konversi pengguna casual menjadi registered.
+
+====================================================================
+                Selesai - Analisis Data Bike Sharing
+====================================================================
