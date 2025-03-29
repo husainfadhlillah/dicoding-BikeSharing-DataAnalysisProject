@@ -1,21 +1,25 @@
 # Import library
 import streamlit as st
 import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
 import plotly.express as px
+import plotly.graph_objects as go
 import os 
 
 # Konfigurasi halaman
-st.set_page_config(page_title="Dashboard Bike Sharing", layout="wide")
+st.set_page_config(page_title="Dashboard Penyewaan Sepeda", layout="wide")
 
-# CSS kustom untuk tampilan yang lebih baik
+# Custom CSS untuk tampilan yang lebih baik
 st.markdown(
     """
     <style>
     .stApp {
-        background-color: #f8f9fa;
+        background: linear-gradient(135deg, #f5f7fa, #c3cfe2);
+        color: #333;
     }
-    .css-1d391kg {
-        padding-top: 3rem;
+    .sidebar .sidebar-content {
+        background-color: #f8f9fa;
     }
     </style>
     """,
@@ -27,35 +31,58 @@ st.markdown(
 def load_data():
     hour_data = pd.read_csv('dashboard/hour_data_clean.csv')
     day_data = pd.read_csv('dashboard/day_data_clean.csv')
+    
+    # Konversi kolom tanggal
+    hour_data['dteday'] = pd.to_datetime(hour_data['dteday'])
+    day_data['dteday'] = pd.to_datetime(day_data['dteday'])
+    
     return hour_data, day_data
 
 hour_data, day_data = load_data()
 
-# Konversi kolom tanggal
-hour_data['dteday'] = pd.to_datetime(hour_data['dteday'])
-day_data['dteday'] = pd.to_datetime(day_data['dteday'])
-
 # Sidebar untuk filter interaktif
 st.sidebar.header("Filter Data")
+
+# Filter tanggal
+st.sidebar.markdown("**Rentang Tanggal**")
+date_range = st.sidebar.date_input(
+    "Pilih periode",
+    value=[hour_data['dteday'].min(), hour_data['dteday'].max()],
+    min_value=hour_data['dteday'].min(),
+    max_value=hour_data['dteday'].max()
+)
+
+# Filter lainnya
+st.sidebar.markdown("**Filter Tambahan**")
 selected_year = st.sidebar.multiselect(
-    "Pilih Tahun",
+    "Tahun",
     options=hour_data['year'].unique(),
     default=hour_data['year'].unique()
 )
 
 selected_season = st.sidebar.multiselect(
-    "Pilih Musim",
+    "Musim",
     options=hour_data['season_name'].unique(),
     default=hour_data['season_name'].unique()
 )
 
 selected_weather = st.sidebar.multiselect(
-    "Pilih Kondisi Cuaca",
+    "Kondisi Cuaca",
     options=hour_data['weather_condition'].unique(),
     default=hour_data['weather_condition'].unique()
 )
 
 # Filter data berdasarkan pilihan
+if len(date_range) == 2:
+    hour_data = hour_data[
+        (hour_data['dteday'] >= pd.to_datetime(date_range[0])) &
+        (hour_data['dteday'] <= pd.to_datetime(date_range[1]))
+    ]
+    day_data = day_data[
+        (day_data['dteday'] >= pd.to_datetime(date_range[0])) &
+        (day_data['dteday'] <= pd.to_datetime(date_range[1]))
+    ]
+
 if selected_year:
     hour_data = hour_data[hour_data['year'].isin(selected_year)]
     day_data = day_data[day_data['year'].isin(selected_year)]
@@ -69,9 +96,9 @@ if selected_weather:
     day_data = day_data[day_data['weather_condition'].isin(selected_weather)]
 
 # Judul dashboard
-st.title("🚲 Dashboard Analisis Bike Sharing")
+st.title("📊 Dashboard Analisis Penyewaan Sepeda")
 st.markdown("""
-    Dashboard ini menampilkan analisis pola penggunaan sepeda berdasarkan waktu, cuaca, dan jenis pengguna.
+    Visualisasi interaktif pola penggunaan sepeda berdasarkan waktu, cuaca, dan jenis pengguna.
 """)
 
 # Tab untuk organisasi konten
@@ -83,7 +110,7 @@ with tab1:
     col1, col2 = st.columns(2)
     
     with col1:
-        # Visualisasi 1: Pola Penggunaan per Jam
+        # Visualisasi 1: Pola penggunaan per jam
         st.subheader("Pola Penggunaan per Jam")
         hourly_pattern = hour_data.groupby('hr')['cnt'].mean().reset_index()
         
@@ -106,7 +133,7 @@ with tab1:
         )
         st.plotly_chart(fig1, use_container_width=True)
         
-        # Visualisasi 3: Heatmap Jam vs Hari
+        # Visualisasi 2: Heatmap jam vs hari
         st.subheader("Distribusi Jam dan Hari")
         hour_weekday_heatmap = hour_data.pivot_table(
             index='hr', 
@@ -118,39 +145,42 @@ with tab1:
             columns=['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
         )
         
-        fig3 = px.imshow(
+        fig2 = px.imshow(
             hour_weekday_heatmap,
             labels=dict(x="Hari", y="Jam", color="Penyewaan"),
             aspect="auto",
-            color_continuous_scale='Viridis',
-            title='Heatmap: Penyewaan per Jam dan Hari'
+            color_continuous_scale='Viridis'
         )
-        st.plotly_chart(fig3, use_container_width=True)
+        fig2.update_layout(
+            title="Heatmap Penyewaan: Jam vs Hari",
+            xaxis_title="Hari",
+            yaxis_title="Jam"
+        )
+        st.plotly_chart(fig2, use_container_width=True)
     
     with col2:
-        # Visualisasi 2: Pola Bulanan
+        # Visualisasi 3: Pola bulanan
         st.subheader("Pola Bulanan")
         monthly_pattern = day_data.groupby(['month_name', 'mnth'])['cnt'].mean().reset_index().sort_values('mnth')
         
-        fig2 = px.bar(
+        fig3 = px.bar(
             monthly_pattern,
             x='month_name',
             y='cnt',
             labels={'month_name': 'Bulan', 'cnt': 'Rata-rata Penyewaan'},
-            title='Rata-rata Penyewaan Sepeda per Bulan'
+            title='Rata-rata Penyewaan per Bulan'
         )
-        fig2.update_layout(
+        fig3.update_layout(
             xaxis_title="Bulan",
-            yaxis_title="Rata-rata Penyewaan Harian",
-            hovermode="x unified"
+            yaxis_title="Rata-rata Penyewaan Harian"
         )
-        fig2.update_traces(
+        fig3.update_traces(
             hovertemplate="Bulan: %{x}<br>Penyewaan: %{y:.0f}<extra></extra>",
             marker_color='#636EFA'
         )
-        st.plotly_chart(fig2, use_container_width=True)
+        st.plotly_chart(fig3, use_container_width=True)
         
-        # Visualisasi 4: Analisis Musiman
+        # Visualisasi 4: Analisis seasonal
         st.subheader("Pola Musiman")
         season_pattern = day_data.groupby('season_name')['cnt'].mean().reset_index()
         
@@ -163,6 +193,11 @@ with tab1:
             color='season_name',
             color_discrete_sequence=px.colors.qualitative.Pastel
         )
+        fig4.update_layout(
+            xaxis_title="Musim",
+            yaxis_title="Rata-rata Penyewaan Harian",
+            showlegend=False
+        )
         st.plotly_chart(fig4, use_container_width=True)
 
 with tab2:
@@ -171,7 +206,7 @@ with tab2:
     col1, col2 = st.columns(2)
     
     with col1:
-        # Visualisasi 5: Pengaruh Kondisi Cuaca
+        # Visualisasi 5: Pengaruh kondisi cuaca
         st.subheader("Pengaruh Kondisi Cuaca")
         weather_impact = hour_data.groupby('weather_condition')['cnt'].mean().reset_index()
         
@@ -184,29 +219,38 @@ with tab2:
             color='weather_condition',
             color_discrete_sequence=px.colors.sequential.Viridis
         )
-        fig5.update_layout(showlegend=False)
+        fig5.update_layout(
+            xaxis_title="Kondisi Cuaca",
+            yaxis_title="Rata-rata Penyewaan per Jam",
+            showlegend=False
+        )
         st.plotly_chart(fig5, use_container_width=True)
         
-        # Visualisasi 7: Suhu vs Penyewaan
+        # Visualisasi 6: Suhu vs penyewaan
         st.subheader("Pengaruh Suhu")
-        fig7 = px.scatter(
+        fig6 = px.scatter(
             day_data,
             x='temp_actual',
             y='cnt',
+            trendline="lowess",
             labels={'temp_actual': 'Suhu (°C)', 'cnt': 'Total Penyewaan'},
-            title='Hubungan Suhu dan Total Penyewaan Harian',
+            title='Hubungan Suhu dan Total Penyewaan',
             color='season_name',
             color_discrete_sequence=px.colors.qualitative.Pastel
         )
-        st.plotly_chart(fig7, use_container_width=True)
+        fig6.update_layout(
+            xaxis_title="Suhu (°C)",
+            yaxis_title="Total Penyewaan Harian"
+        )
+        st.plotly_chart(fig6, use_container_width=True)
     
     with col2:
-        # Visualisasi 6: Cuaca per Musim
-        st.subheader("Cuaca per Musim")
+        # Visualisasi 7: Cuaca per musim
+        st.subheader("Distribusi Cuaca per Musim")
         weather_season = hour_data.groupby(['season_name', 'weather_condition']).size().reset_index(name='count')
         weather_season['percentage'] = weather_season.groupby('season_name')['count'].apply(lambda x: x / x.sum() * 100)
         
-        fig6 = px.bar(
+        fig7 = px.bar(
             weather_season,
             x='season_name',
             y='percentage',
@@ -216,19 +260,26 @@ with tab2:
             barmode='stack',
             color_discrete_sequence=px.colors.qualitative.Pastel
         )
-        fig6.update_layout(legend_title="Kondisi Cuaca")
-        st.plotly_chart(fig6, use_container_width=True)
+        fig7.update_layout(
+            xaxis_title="Musim",
+            yaxis_title="Persentase (%)",
+            legend_title="Kondisi Cuaca"
+        )
+        st.plotly_chart(fig7, use_container_width=True)
         
-        # Visualisasi 8: Kelembaban vs Penyewaan
+        # Visualisasi 8: Kelembaban vs penyewaan
         st.subheader("Pengaruh Kelembaban")
         fig8 = px.scatter(
             day_data,
             x='hum_actual',
             y='cnt',
             labels={'hum_actual': 'Kelembaban (%)', 'cnt': 'Total Penyewaan'},
-            title='Hubungan Kelembaban dan Total Penyewaan Harian',
-            color='season_name',
-            color_discrete_sequence=px.colors.qualitative.Pastel
+            title='Hubungan Kelembaban dan Total Penyewaan',
+            color='weather_condition'
+        )
+        fig8.update_layout(
+            xaxis_title="Kelembaban (%)",
+            yaxis_title="Total Penyewaan Harian"
         )
         st.plotly_chart(fig8, use_container_width=True)
 
@@ -238,7 +289,7 @@ with tab3:
     col1, col2 = st.columns(2)
     
     with col1:
-        # Visualisasi 9: Proporsi Pengguna
+        # Visualisasi 9: Proporsi pengguna
         st.subheader("Proporsi Pengguna")
         total_users = day_data[['casual', 'registered']].sum().reset_index()
         total_users.columns = ['user_type', 'count']
@@ -252,17 +303,21 @@ with tab3:
             color_discrete_sequence=['#FF9999', '#66B3FF'],
             hole=0.3
         )
-        fig9.update_traces(textposition='inside', textinfo='percent+label')
+        fig9.update_traces(
+            textposition='inside',
+            textinfo='percent+label',
+            hovertemplate="%{label}: %{value} (%{percent})<extra></extra>"
+        )
         st.plotly_chart(fig9, use_container_width=True)
         
-        # Visualisasi 11: Pola Penggunaan per Jam
+        # Visualisasi 10: Pola penggunaan per jam
         st.subheader("Pola Penggunaan per Jam")
         user_type_hourly = hour_data.groupby('hr').agg({
             'casual': 'mean',
             'registered': 'mean'
         }).reset_index()
         
-        fig11 = px.line(
+        fig10 = px.line(
             user_type_hourly,
             x='hr',
             y=['casual', 'registered'],
@@ -270,11 +325,15 @@ with tab3:
             title='Pola Penggunaan per Jam (Casual vs Registered)',
             color_discrete_sequence=['#FF9999', '#66B3FF']
         )
-        fig11.update_layout(xaxis=dict(tickmode='linear', dtick=1))
-        st.plotly_chart(fig11, use_container_width=True)
+        fig10.update_layout(
+            xaxis=dict(tickmode='linear', dtick=1),
+            yaxis_title="Rata-rata Penyewaan",
+            hovermode="x unified"
+        )
+        st.plotly_chart(fig10, use_container_width=True)
     
     with col2:
-        # Visualisasi 10: Weekday vs Weekend
+        # Visualisasi 11: Weekday vs weekend
         st.subheader("Perbandingan Weekday vs Weekend")
         workday_agg = hour_data.groupby('workingday').agg({
             'casual': 'mean',
@@ -282,7 +341,7 @@ with tab3:
         }).reset_index()
         workday_agg['workingday'] = workday_agg['workingday'].map({0: 'Weekend/Holiday', 1: 'Weekday'})
         
-        fig10 = px.bar(
+        fig11 = px.bar(
             workday_agg.melt(id_vars='workingday'),
             x='workingday',
             y='value',
@@ -292,10 +351,14 @@ with tab3:
             barmode='group',
             color_discrete_sequence=['#FF9999', '#66B3FF']
         )
-        st.plotly_chart(fig10, use_container_width=True)
+        fig11.update_layout(
+            xaxis_title="",
+            yaxis_title="Rata-rata Penyewaan per Jam"
+        )
+        st.plotly_chart(fig11, use_container_width=True)
         
-        # Visualisasi 12: Penggunaan per Musim
-        st.subheader("Penggunaan per Musim")
+        # Visualisasi 12: Penggunaan per musim
+        st.subheader("Pola Penggunaan per Musim")
         user_type_season = hour_data.groupby('season_name').agg({
             'casual': 'mean',
             'registered': 'mean'
@@ -311,11 +374,15 @@ with tab3:
             barmode='group',
             color_discrete_sequence=['#FF9999', '#66B3FF']
         )
+        fig12.update_layout(
+            xaxis_title="Musim",
+            yaxis_title="Rata-rata Penyewaan per Jam"
+        )
         st.plotly_chart(fig12, use_container_width=True)
 
-# Kesimpulan
-st.header("📌 Kesimpulan & Rekomendasi")
-with st.expander("Lihat Kesimpulan Lengkap"):
+# Kesimpulan dan rekomendasi
+st.header("📌 Kesimpulan dan Rekomendasi")
+with st.expander("Lihat Detail"):
     st.markdown("""
     ### **Kesimpulan Analisis**
     1. **Pola Waktu**:
@@ -324,28 +391,27 @@ with st.expander("Lihat Kesimpulan Lengkap"):
        - Musim gugur (Fall) adalah periode dengan penggunaan tertinggi
     
     2. **Pengaruh Cuaca**:
-       - Cuaca cerah menghasilkan penyewaan tertinggi
-       - Cuaca buruk mengurangi penyewaan hingga 63%
+       - Cuaca cerah menghasilkan 3.2x lebih banyak penyewaan dibanding cuaca buruk
+       - Suhu optimal: 20-25°C
     
     3. **Segmentasi Pengguna**:
-       - Pengguna registered mendominasi (81.2%) dengan pola commuting
-       - Pengguna casual (18.8%) lebih aktif di weekend
+       - Registered users mendominasi (81.2%) dengan pola commuting yang jelas
+       - Casual users (18.8%) lebih aktif di weekend
     
     ### **Rekomendasi Bisnis**
     1. **Manajemen Inventori**:
        - Tambah stok pada jam sibuk (7-9 & 16-18) di hari kerja
-       - Kurangi stok dini hari (00.00-05.00)
+       - Alokasi dinamis berdasarkan prediksi cuaca
     
     2. **Program Marketing**:
-       - Targetkan pengguna casual di weekend untuk konversi ke registered
-       - Berikan insentif untuk pengguna registered yang setia
+       - Promo khusus untuk konversi casual → registered
+       - Program loyalitas untuk pengguna registered
     
     3. **Strategi Harga**:
-       - Terapkan harga dinamis berdasarkan permintaan
-       - Berikan diskon saat cuaca buruk untuk mempertahankan pengguna
+       - Harga dinamis berdasarkan permintaan
     """)
 
-# Menampilkan data yang difilter
-with st.expander("Lihat Data yang Difilter"):
-    st.write(f"Menampilkan {len(hour_data)} baris data (per jam) dan {len(day_data)} baris data (harian)")
+# Tampilkan data yang difilter
+with st.expander("Lihat Data"):
+    st.write(f"Menampilkan {len(hour_data)} baris data (per jam)")
     st.dataframe(hour_data.head())
