@@ -29,13 +29,12 @@ st.markdown(
 # Fungsi untuk memuat data
 @st.cache_data
 def load_data():
-    hour_data = pd.read_csv('dashboard/hour_data_clean.csv')
-    day_data = pd.read_csv('dashboard/day_data_clean.csv')
+    script_dir = os.path.dirname(os.path.abspath(__file__))
+    hour_data_path = os.path.join(script_dir, 'hour_data_clean.csv')
+    day_data_path = os.path.join(script_dir, 'day_data_clean.csv')
     
-    # Konversi kolom tanggal
-    hour_data['dteday'] = pd.to_datetime(hour_data['dteday'])
-    day_data['dteday'] = pd.to_datetime(day_data['dteday'])
-    
+    hour_data = pd.read_csv(hour_data_path)
+    day_data = pd.read_csv(day_data_path)
     return hour_data, day_data
 
 hour_data, day_data = load_data()
