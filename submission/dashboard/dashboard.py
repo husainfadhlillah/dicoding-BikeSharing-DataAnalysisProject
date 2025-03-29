@@ -246,6 +246,38 @@ with tab3:
         ax.set_xlabel('Grup Pengguna')
         ax.set_ylabel('Jumlah Penyewaan per Hari')
         st.pyplot(fig6)
+    
+    # Tambahkan visualisasi RFM untuk Registered Users
+    st.subheader("Analisis RFM untuk Pengguna Registered")
+    
+    # Hitung metrik RFM
+    last_usage = hour_data_filtered.groupby('dteday')['registered'].sum().reset_index()
+    last_usage['days_since_last'] = (hour_data_filtered['dteday'].max() - last_usage['dteday']).dt.days
+    frequency_rfm = hour_data_filtered.groupby('dteday')['registered'].sum().reset_index()
+    monetary_rfm = hour_data_filtered['registered'].sum()
+    
+    # Buat visualisasi RFM
+    fig7, ax = plt.subplots(1, 3, figsize=(18, 5))
+    
+    # 1. Recency: Distribusi hari sejak terakhir penyewaan
+    sns.histplot(data=last_usage, x='days_since_last', bins=30, kde=True, ax=ax[0])
+    ax[0].set_title('Distribusi Recency (Hari Sejak Terakhir Penyewaan)')
+    ax[0].set_xlabel('Hari')
+    ax[0].set_ylabel('Frekuensi')
+    
+    # 2. Frequency: Distribusi frekuensi penyewaan per hari
+    sns.histplot(data=frequency_rfm, x='registered', bins=30, kde=True, ax=ax[1])
+    ax[1].set_title('Distribusi Frequency (Penyewaan per Hari)')
+    ax[1].set_xlabel('Jumlah Penyewaan')
+    ax[1].set_ylabel('Frekuensi')
+    
+    # 3. Monetary: Total penyewaan oleh pengguna registered
+    sns.barplot(x=['Total Registered Users'], y=[monetary_rfm], ax=ax[2])
+    ax[2].set_title('Total Penyewaan oleh Pengguna Registered')
+    ax[2].set_ylabel('Jumlah')
+    
+    plt.tight_layout()
+    st.pyplot(fig7)
 
 # Kesimpulan dan rekomendasi
 st.header("📌 Kesimpulan dan Rekomendasi")
