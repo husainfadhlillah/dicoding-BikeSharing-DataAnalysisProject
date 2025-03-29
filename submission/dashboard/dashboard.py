@@ -136,7 +136,7 @@ with tab1:
     col1, col2 = st.columns(2)
     
     with col1:
-        # Visualisasi 1: Pola penggunaan per jam (sesuai gambar notebook)
+        # Visualisasi 1: Pola penggunaan per jam
         st.subheader("Rata-rata Penyewaan Sepeda berdasarkan Jam")
         hourly_pattern = hour_data_filtered.groupby('hr')['cnt'].mean().reset_index()
         
@@ -150,7 +150,7 @@ with tab1:
         st.pyplot(fig1)
         
     with col2:
-        # Visualisasi 2: Heatmap jam vs hari (sesuai gambar notebook)
+        # Visualisasi 2: Heatmap jam vs hari
         st.subheader("Heatmap Penyewaan Sepeda: Jam vs Hari")
         hour_weekday_heatmap = hour_data_filtered.pivot_table(
             index='hr', 
@@ -176,7 +176,7 @@ with tab2:
     col1, col2 = st.columns(2)
     
     with col1:
-        # Visualisasi 3: Pengaruh cuaca (sesuai gambar notebook)
+        # Visualisasi 3: Pengaruh cuaca
         st.subheader("Rata-rata Penyewaan Sepeda berdasarkan Kondisi Cuaca")
         weather_impact = hour_data_filtered.groupby('weather_condition')['cnt'].mean().reset_index()
         
@@ -189,7 +189,7 @@ with tab2:
         st.pyplot(fig3)
         
     with col2:
-        # Visualisasi 4: Distribusi cuaca per grup pengguna (sesuai notebook)
+        # Visualisasi 4: Distribusi cuaca per grup pengguna
         st.subheader("Distribusi Kondisi Cuaca per Grup Pengguna")
         
         # Buat kategori pengguna berdasarkan quartile
@@ -215,7 +215,7 @@ with tab3:
     col1, col2 = st.columns(2)
     
     with col1:
-        # Visualisasi 5: Proporsi pengguna (sesuai gambar notebook)
+        # Visualisasi 5: Proporsi pengguna
         st.subheader("Proporsi Pengguna Casual vs Registered")
         
         if selected_user_type == 'Semua':
@@ -232,7 +232,7 @@ with tab3:
             st.info(f"Sedang menampilkan data untuk pengguna {selected_user_type} saja")
     
     with col2:
-        # Visualisasi 6: Distribusi penyewaan per grup pengguna (sesuai notebook)
+        # Visualisasi 6: Distribusi penyewaan per grup pengguna
         st.subheader("Distribusi Penyewaan per Grup Pengguna")
         
         frequency = hour_data_filtered.groupby('dteday')['cnt'].sum().reset_index()
