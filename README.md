@@ -49,7 +49,6 @@ submission
 ├───dashboard
 | ├───day_data_clean.csv
 | ├───hour_data_clean.csv
-| ├───requirements.txt
 | └───dashboard.py
 ├───data
 | ├───day.csv
@@ -57,6 +56,7 @@ submission
 ├───notebook.ipynb
 ├───rangkuman.txt
 ├───README.md
+├───requirements.txt
 └───url.txt
 ```
 
