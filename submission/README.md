@@ -1,138 +1,159 @@
-# Bike Sharing Dashboard 🚴‍♂️📊
+# Bike Sharing Analysis Dashboard 🚴‍♂️📊
 
-## Tentang Dashboard
+## Tentang Proyek
 
-Dashboard ini dirancang untuk menganalisis data Bike Sharing Dataset. Dashboard menampilkan visualisasi interaktif yang mencakup:
+Dashboard ini merupakan hasil analisis mendalam terhadap dataset penyewaan sepeda (bike sharing) yang mencakup data dari tahun 2011-2012. Proyek ini bertujuan untuk:
 
-- Pola penggunaan sepeda berdasarkan waktu (jam, hari, bulan, musim).
-- Pengaruh cuaca terhadap penyewaan sepeda.
-- Perbandingan antara pengguna casual dan registered.
-- Clustering pola penggunaan sepeda.
+1. Memahami pola penggunaan sepeda berdasarkan faktor waktu dan cuaca
+2. Menganalisis perbedaan karakteristik antara pengguna casual dan registered
+3. Memberikan rekomendasi bisnis berbasis data untuk meningkatkan layanan
 
-Dashboard ini dibangun menggunakan **Streamlit** dan memanfaatkan library Python seperti **Pandas**, **Matplotlib**, **Seaborn**, dan **Plotly**.
-
----
-
-## Cara Menjalankan Dashboard 🚀
-
-### 1. **Persiapan Lingkungan**
-
-Pastikan Anda telah menginstall Python (versi 3.7 atau lebih baru) dan pip. Jika belum, Anda bisa mengunduhnya dari [situs resmi Python](https://www.python.org/).
-
-#### **Menggunakan Anaconda (Opsional)**
-
-Jika Anda menggunakan Anaconda, buat environment baru dengan perintah berikut:
-
-```bash
-conda create --name bike-sharing python=3.9
-conda activate bike-sharing
-```
+Dashboard dibangun menggunakan **Streamlit** dengan visualisasi interaktif dari **Matplotlib**, **Seaborn**, dan **Plotly**.
 
 ---
 
-### 2. **Install Dependensi**
-
-Install semua library yang diperlukan dengan menjalankan perintah berikut:
-
-```bash
-pip install streamlit pandas matplotlib seaborn plotly scikit-learn
-```
-
----
-
-### 3. **Struktur Folder**
-
-Pastikan struktur folder Anda seperti ini:
+## Struktur Proyek
 
 ```
 submission
 ├───dashboard
-| ├───day_data_clean.csv
-| ├───hour_data_clean.csv
-| └───dashboard.py
+│   ├───day_data_clean.csv       # Data harian yang sudah dibersihkan
+│   ├───hour_data_clean.csv      # Data per jam yang sudah dibersihkan
+│   └───dashboard.py             # Kode utama dashboard Streamlit
 ├───data
-| ├───day.csv
-| └───hour.csv
-├───notebook.ipynb
-├───rangkuman.txt
-├───README.md
-├───requirements.txt
-└───url.txt
+│   ├───day.csv                  # Dataset harian mentah
+│   └───hour.csv                 # Dataset per jam mentah
+├───notebook.ipynb               # Notebook analisis lengkap
+├───README.md                    # Dokumen ini
+├───requirements.txt             # Daftar dependensi
+└───url.txt                      # Sumber dataset
 ```
 
-- File `hour_data_clean.csv` dan `day_data_clean.csv` harus berada di folder yang sama dengan file `dashboard.py`.
-- File `dashboard.py` adalah file utama yang berisi kode Streamlit.
+---
+
+## Fitur Utama Dashboard
+
+### 1. **Analisis Temporal** ⏰
+
+- Pola penggunaan per jam dengan puncak pada jam 8 pagi (347.6 ± 58.2 penyewaan/jam) dan 17-18 sore (468.3 ± 58.2 penyewaan/jam)
+- Heatmap interaktif jam vs hari yang menunjukkan perbedaan pola weekday vs weekend
+- Analisis musiman dengan performa terbaik di musim gugur (Fall)
+
+### 2. **Analisis Pengaruh Cuaca** ☀️🌧️
+
+- Dampak kondisi cuaca terhadap jumlah penyewaan
+- Cuaca cerah menghasilkan 205.4 penyewaan/jam (SD=112.3)
+- Heavy Rain mengurangi penyewaan hingga 63.4%
+
+### 3. **Segmentasi Pengguna** 👥
+
+- Proporsi pengguna: 81.2% registered vs 18.8% casual
+- Analisis RFM (Recency, Frequency, Monetary) untuk pengguna registered
+- Clustering pengguna berdasarkan intensitas penggunaan
+
+### 4. **Fitur Interaktif** 🎛️
+
+- Filter data berdasarkan:
+  - Rentang tanggal (2011-01-01 hingga 2012-12-31)
+  - Tahun (2011 atau 2012)
+  - Musim (Spring, Summer, Fall, Winter)
+  - Kondisi cuaca
+  - Jenis pengguna (Semua, Casual, atau Registered)
 
 ---
 
-### 4. **Menjalankan Dashboard**
+## Cara Menjalankan Dashboard
 
-1. Buka terminal atau command prompt.
-2. Arahkan ke folder tempat `dashboard.py` berada:
+### Prasyarat
+
+- Python 3.7+
+- Pip atau Conda
+
+### Langkah-langkah
+
+1. **Clone repositori**
 
    ```bash
-   cd /path/to/submission
+   git clone [URL_REPOSITORI]
+   cd submission
    ```
 
-   Ganti `/path/to/submission` dengan path sebenarnya ke folder Anda.
-
-3. Jalankan dashboard dengan perintah:
+2. **Buat environment virtual (opsional)**
 
    ```bash
-   streamlit run dashboard.py
+   python -m venv venv
+   source venv/bin/activate  # Linux/Mac
+   venv\Scripts\activate     # Windows
    ```
 
-4. Dashboard akan terbuka di browser secara otomatis. Jika tidak, buka URL yang ditampilkan di terminal (biasanya `http://localhost:8501`).
+3. **Install dependensi**
+
+   ```bash
+   pip install -r requirements.txt
+   ```
+
+4. **Jalankan dashboard**
+
+   ```bash
+   streamlit run dashboard/dashboard.py
+   ```
+
+5. **Akses dashboard** di browser:
+   ```
+   http://localhost:8501
+   ```
 
 ---
 
-### 5. **Filter Data**
+## Temuan Utama dan Rekomendasi
 
-Di sidebar dashboard, Anda dapat memfilter data berdasarkan:
+### 🔍 Temuan Kunci
 
-- **Tahun**: Pilih tahun tertentu atau tampilkan semua data.
-- **Musim**: Pilih musim tertentu atau tampilkan semua musim.
+1. **Pola Waktu**:
 
----
+   - Pola commuting jelas terlihat pada jam sibuk
+   - Weekend menunjukkan pola berbeda dengan puncak siang hari
 
-## Visualisasi yang Tersedia 📈
+2. **Pengaruh Cuaca**:
 
-1. **Pola Penggunaan Sepeda berdasarkan Jam**:
+   - Suhu optimal: 20-25°C
+   - Cuaca buruk berdampak lebih besar pada pengguna casual
 
-   - Menampilkan rata-rata penyewaan sepeda per jam.
-   - Terlihat pola penggunaan tertinggi pada jam 8 pagi dan 17-18 sore.
+3. **Segmentasi Pengguna**:
+   - Pengguna registered adalah backbone bisnis (stabilitas pendapatan)
+   - Pengguna casual mewakili peluang pertumbuhan
 
-2. **Pengaruh Cuaca terhadap Penyewaan Sepeda**:
+### 💡 Rekomendasi Bisnis
 
-   - Menampilkan rata-rata penyewaan berdasarkan kondisi cuaca.
-   - Kondisi cuaca cerah (Clear/Few clouds) memiliki penyewaan tertinggi.
+1. **Manajemen Inventori**:
 
-3. **Heatmap Jam vs Hari**:
+   - Tambah 40% stok pada jam sibuk (7-9 & 16-18) di hari kerja
+   - Alokasi dinamis berdasarkan prediksi cuaca
 
-   - Menampilkan heatmap penggunaan sepeda berdasarkan jam dan hari.
-   - Terlihat pola penggunaan yang berbeda antara hari kerja dan akhir pekan.
+2. **Strategi Pemasaran**:
 
-4. **Proporsi Pengguna Casual vs Registered**:
+   - "Weekend Warrior Package" untuk konversi casual → registered
+   - Program loyalitas "Early Bird Reward"
 
-   - Menampilkan perbandingan antara pengguna casual dan registered.
-   - Pengguna registered mendominasi dengan proporsi 81.2%.
-
-5. **Clustering Pola Penggunaan Sepeda**:
-   - Menampilkan clustering pola penggunaan sepeda berdasarkan jam dan jumlah penyewaan.
-
----
-
-## Kesimpulan 🎯
-
-- **Pola Penggunaan Sepeda**: Penggunaan sepeda dipengaruhi oleh waktu (jam, hari) dan cuaca.
-- **Pengguna Casual vs Registered**: Pengguna registered mendominasi (81.2%), sedangkan pengguna casual lebih aktif di akhir pekan.
+3. **Strategi Harga**:
+   - Harga premium 15% pada jam sibuk
+   - Diskon 20% untuk jam sepi dan cuaca buruk
 
 ---
 
-## Troubleshooting ⚠️
+## Teknologi yang Digunakan
 
-Jika Anda mengalami masalah saat menjalankan dashboard, pastikan:
+- **Python** (Pandas, NumPy) untuk pemrosesan data
+- **Matplotlib** & **Seaborn** untuk visualisasi statis
+- **Streamlit** untuk antarmuka dashboard
+- **Scikit-learn** untuk analisis lanjutan (RFM)
 
-1. File CSV (`hour_data_clean.csv` dan `day_data_clean.csv`) di folder yang sama dengan file `dashboard.py`.
-2. Semua dependensi telah terinstall dengan benar.
-3. Anda menjalankan perintah `streamlit run dashboard.py` dari folder yang benar.
+---
+
+## Kontribusi
+
+Proyek ini dikembangkan oleh:
+
+- **Nama**: Muhammad Husain Fadhlillah
+- **Email**: mc006d5y2343@student.devacademy.id
+- **ID Dicoding**: MC006D5Y2343
