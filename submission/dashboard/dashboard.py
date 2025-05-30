@@ -250,7 +250,7 @@ with tab1:
                             fig_hm_day, ax_hm_day = plt.subplots(figsize=(10, 7))
                             sns.heatmap(df_to_plot, cmap='viridis', annot=False, fmt=".0f", linewidths=.5, cbar_kws={'label': f'Rata-rata Penyewaan ({selected_user_type})'}, ax=ax_hm_day)
                             ax_hm_day.set_title('Heatmap Rata-rata Penyewaan Sepeda: Jam vs Hari dalam Seminggu', fontsize=14)
-                            ax_hm_day.set_xlabel('Hari dalam Seminggu', fontsize=11); ax_hm_day.set_ylabel('Hari dalam Seminggu', fontsize=11)
+                            ax_hm_day.set_xlabel('Hari dalam Seminggu', fontsize=11); ax_hm_day.set_ylabel('Jam dalam Sehari', fontsize=11)
                             st.pyplot(fig_hm_day)
                         else: st.info("Tidak ada data heatmap jam vs hari yang valid untuk filter (setelah reindex).")
                     else: st.info("Tidak ada kolom hari yang relevan dalam data pivot heatmap jam vs hari.")
