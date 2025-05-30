@@ -36,7 +36,7 @@ submission
 ### 1. **Analisis Berdasarkan Waktu** ⏰
 
 - Visualisasi rata-rata penyewaan per jam, per hari dalam seminggu, per bulan, dan per musim.
-- Heatmap interaktif jam vs hari dan jam vs bulan untuk melihat pola gabungan.
+- Heatmap interaktif jam vs hari dalam seminggu, jam vs bulan, Jam vs Musim untuk melihat pola gabungan.
 
 ### 2. **Analisis Berdasarkan Cuaca** ☀️🌧️
 
