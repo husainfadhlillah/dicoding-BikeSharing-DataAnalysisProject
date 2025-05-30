@@ -4,11 +4,11 @@
 
 Dashboard ini merupakan hasil analisis mendalam terhadap dataset penyewaan sepeda (bike sharing) yang mencakup data dari tahun 2011-2012. Proyek ini bertujuan untuk:
 
-1. Memahami pola penggunaan sepeda berdasarkan faktor waktu dan cuaca
-2. Menganalisis perbedaan karakteristik antara pengguna casual dan registered
-3. Memberikan rekomendasi bisnis berbasis data untuk meningkatkan layanan
+1.  Memahami pola penggunaan sepeda berdasarkan faktor waktu (jam, hari, bulan, musim) dan cuaca.
+2.  Menganalisis perbedaan karakteristik antara pengguna casual dan registered.
+3.  Memberikan rekomendasi bisnis berbasis data untuk meningkatkan layanan.
 
-Dashboard dibangun menggunakan **Streamlit** dengan visualisasi interaktif dari **Matplotlib**, **Seaborn**, dan **Plotly**.
+Dashboard dibangun menggunakan **Streamlit** dengan visualisasi interaktif dari **Matplotlib** dan **Seaborn**.
 
 ---
 
@@ -33,30 +33,31 @@ submission
 
 ## Fitur Utama Dashboard
 
-### 1. **Analisis Temporal** ⏰
+### 1. **Analisis Berdasarkan Waktu** ⏰
 
-- Pola penggunaan per jam dengan puncak pada jam 8 pagi (347.6 ± 58.2 penyewaan/jam) dan 17-18 sore (468.3 ± 58.2 penyewaan/jam)
-- Heatmap interaktif jam vs hari yang menunjukkan perbedaan pola weekday vs weekend
-- Analisis musiman dengan performa terbaik di musim gugur (Fall)
+- Visualisasi rata-rata penyewaan per jam, per hari dalam seminggu, per bulan, dan per musim.
+- Heatmap interaktif jam vs hari dan jam vs bulan untuk melihat pola gabungan.
 
-### 2. **Analisis Pengaruh Cuaca** ☀️🌧️
+### 2. **Analisis Berdasarkan Cuaca** ☀️🌧️
 
-- Dampak kondisi cuaca terhadap jumlah penyewaan
-- Cuaca cerah menghasilkan 205.4 penyewaan/jam (SD=112.3)
-- Heavy Rain mengurangi penyewaan hingga 63.4%
+- Dampak kondisi cuaca terhadap jumlah penyewaan.
+- Heatmap jam vs kondisi cuaca.
 
-### 3. **Segmentasi Pengguna** 👥
+### 3. **Analisis Berdasarkan Pengguna** 👥
 
-- Proporsi pengguna: 81.2% registered vs 18.8% casual
-- Analisis RFM (Recency, Frequency, Monetary) untuk pengguna registered
-- Clustering pengguna berdasarkan intensitas penggunaan
+- Proporsi pengguna casual vs registered.
+- Perbandingan pola penggunaan casual vs registered berdasarkan hari kerja/akhir pekan, jam, dan musim.
 
-### 4. **Fitur Interaktif** 🎛️
+### 4. **Analisis Lanjutan** 🔬
+
+- Segmentasi pengguna berdasarkan waktu penggunaan (Pagi, Siang, Sore, Malam) dengan analisis rata-rata penyewaan, komposisi pengguna, suhu, dan proporsi kondisi cuaca per segmen.
+
+### 5. **Fitur Interaktif** 🎛️
 
 - Filter data berdasarkan:
-  - Rentang tanggal (2011-01-01 hingga 2012-12-31)
-  - Tahun (2011 atau 2012)
-  - Musim (Spring, Summer, Fall, Winter)
+  - Rentang tanggal
+  - Tahun
+  - Musim
   - Kondisi cuaca
   - Jenis pengguna (Semua, Casual, atau Registered)
 
@@ -67,92 +68,93 @@ submission
 ### Prasyarat
 
 - Python 3.7+
-- Pip atau Conda
+- Pip
 
 ### Langkah-langkah
 
-1. **Clone repositori**
+1.  **Clone repositori** (Jika proyek Anda ada di Git) atau ekstrak file ZIP proyek Anda.
 
-   ```bash
-   git clone [URL_REPOSITORI]
-   cd submission
-   ```
+2.  **Buka terminal atau command prompt**, navigasi ke direktori utama proyek (`submission`).
 
-2. **Buat environment virtual (opsional)**
+3.  **Buat dan aktifkan environment virtual** (direkomendasikan):
 
-   ```bash
-   python -m venv venv
-   source venv/bin/activate  # Linux/Mac
-   venv\Scripts\activate     # Windows
-   ```
+    ```bash
+    python -m venv venv
+    # Untuk Windows:
+    venv\Scripts\activate
+    # Untuk MacOS/Linux:
+    source venv/bin/activate
+    ```
 
-3. **Install dependensi**
+4.  **Install dependensi**:
+    Pastikan Anda berada di direktori utama proyek (`submission`) yang berisi file `requirements.txt`.
 
-   ```bash
-   pip install -r requirements.txt
-   ```
+    ```bash
+    pip install -r requirements.txt
+    ```
 
-4. **Jalankan dashboard**
+5.  **Jalankan aplikasi Streamlit**:
+    Dari direktori utama proyek (`submission`), jalankan perintah:
 
-   ```bash
-   streamlit run dashboard/dashboard.py
-   ```
+    ```bash
+    streamlit run dashboard/dashboard.py
+    ```
 
-5. **Akses dashboard** di browser:
-   ```
-   http://localhost:8501
-   ```
+6.  **Akses dashboard** di browser Anda. Streamlit akan secara otomatis membuka tab baru, atau Anda dapat mengaksesnya melalui URL yang ditampilkan di terminal (biasanya `http://localhost:8501`).
 
 ---
 
-## Temuan Utama dan Rekomendasi
+## Kesimpulan dan Rekomendasi Bisnis (dari Notebook)
 
-### 🔍 Temuan Kunci
+### **Kesimpulan Analisis**
 
-1. **Pola Waktu**:
+1.  **Pola Waktu**:
 
-   - Pola commuting jelas terlihat pada jam sibuk
-   - Weekend menunjukkan pola berbeda dengan puncak siang hari
+    - Puncak penggunaan pada jam 8 pagi dan 17-18 sore (komuter).
+    - Akhir pekan menunjukkan pola rekreasi (siang-sore).
+    - Musim Gugur (Fall) adalah musim puncak penyewaan.
 
-2. **Pengaruh Cuaca**:
+2.  **Pengaruh Cuaca**:
 
-   - Suhu optimal: 20-25°C
-   - Cuaca buruk berdampak lebih besar pada pengguna casual
+    - Cuaca cerah ("Clear/Few clouds") ideal untuk penyewaan.
+    - Hujan/salju lebat ("Heavy Rain/Snow/Fog") sangat mengurangi penggunaan.
 
-3. **Segmentasi Pengguna**:
-   - Pengguna registered adalah backbone bisnis (stabilitas pendapatan)
-   - Pengguna casual mewakili peluang pertumbuhan
+3.  **Perbedaan Pengguna**:
+    - Registered users (81.2%) mendominasi, terutama untuk komuting hari kerja.
+    - Casual users (18.8%) lebih aktif di akhir pekan dan musim hangat, serta lebih sensitif cuaca.
 
-### 💡 Rekomendasi Bisnis
+### **Rekomendasi Bisnis**
 
-1. **Manajemen Inventori**:
+1.  **Optimalisasi Operasional & Penargetan Pengguna**:
 
-   - Tambah 40% stok pada jam sibuk (7-9 & 16-18) di hari kerja
-   - Alokasi dinamis berdasarkan prediksi cuaca
+    - Sesuaikan ketersediaan sepeda pada jam sibuk komuter dan akhir pekan di area rekreasi.
+    - Tawarkan paket/diskon spesifik untuk segmen waktu dan pengguna (misal, paket komuter, weekend pass, diskon makan siang).
 
-2. **Strategi Pemasaran**:
+2.  **Program Loyalitas & Konversi Pengguna**:
 
-   - "Weekend Warrior Package" untuk konversi casual → registered
-   - Program loyalitas "Early Bird Reward"
+    - Insentif untuk konversi pengguna casual menjadi registered.
+    - Tingkatkan program loyalitas registered (misal, tingkatan keanggotaan).
 
-3. **Strategi Harga**:
-   - Harga premium 15% pada jam sibuk
-   - Diskon 20% untuk jam sepi dan cuaca buruk
+3.  **Inisiatif Musiman & Berbasis Cuaca**:
+
+    - Promosi maksimal di musim ramai (Gugur & Panas) dan strategi khusus untuk musim sepi.
+    - Integrasikan prediksi cuaca di aplikasi, tawarkan "Rain Guarantee".
+
+4.  **Strategi Penempatan & Alokasi Armada**:
+    - Gunakan data heatmap (jam vs hari/bulan/musim) untuk optimasi penempatan armada.
 
 ---
 
 ## Teknologi yang Digunakan
 
-- **Python** (Pandas, NumPy) untuk pemrosesan data
-- **Matplotlib** & **Seaborn** untuk visualisasi statis
-- **Streamlit** untuk antarmuka dashboard
-- **Scikit-learn** untuk analisis lanjutan (RFM)
+- **Python** (Pandas) untuk manipulasi dan analisis data.
+- **Matplotlib** & **Seaborn** untuk visualisasi data.
+- **Streamlit** untuk membangun dashboard interaktif.
+- **Calendar** (library Python standar).
 
 ---
 
-## Kontribusi
-
-Proyek ini dikembangkan oleh:
+## Detail Pembuat
 
 - **Nama**: Muhammad Husain Fadhlillah
 - **Email**: mc006d5y2343@student.devacademy.id
