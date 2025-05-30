@@ -322,23 +322,6 @@ with tab2:
                         st.dataframe(weather_params_df.set_index('weather_condition').style.format("{:.2f}"))
                 else: st.info("Tidak ada data dampak cuaca yang valid setelah reindex.")
             else: st.info("Tidak ada data dampak cuaca untuk filter yang dipilih.")
-        with col2b:
-            st.subheader("Distribusi Penyewaan vs Parameter Cuaca")
-            if 'temp_actual' in hour_data_filtered.columns and not hour_data_filtered[['temp_actual', 'cnt_display']].isnull().all().all() and not hour_data_filtered.empty:
-                fig_scatter_temp, ax_scatter_temp = plt.subplots(figsize=(8,5))
-                sns.scatterplot(x='temp_actual', y='cnt_display', data=hour_data_filtered, alpha=0.5, ax=ax_scatter_temp, color='red')
-                ax_scatter_temp.set_title(f'Penyewaan ({selected_user_type}) vs Suhu Aktual (°C)', fontsize=14)
-                ax_scatter_temp.set_xlabel('Suhu Aktual (°C)', fontsize=11); ax_scatter_temp.set_ylabel(f'Jumlah Penyewaan ({selected_user_type})', fontsize=11)
-                st.pyplot(fig_scatter_temp)
-            else: st.info("Data suhu atau penyewaan tidak cukup untuk scatter plot.")
-
-            if 'hum_actual' in hour_data_filtered.columns and not hour_data_filtered[['hum_actual', 'cnt_display']].isnull().all().all() and not hour_data_filtered.empty :
-                fig_scatter_hum, ax_scatter_hum = plt.subplots(figsize=(8,5))
-                sns.scatterplot(x='hum_actual', y='cnt_display', data=hour_data_filtered, alpha=0.5, ax=ax_scatter_hum, color='blue')
-                ax_scatter_hum.set_title(f'Penyewaan ({selected_user_type}) vs Kelembapan Aktual (%)', fontsize=14)
-                ax_scatter_hum.set_xlabel('Kelembapan Aktual (%)', fontsize=11); ax_scatter_hum.set_ylabel(f'Jumlah Penyewaan ({selected_user_type})', fontsize=11)
-                st.pyplot(fig_scatter_hum)
-            else: st.info("Data kelembapan atau penyewaan tidak cukup untuk scatter plot.")
 
         st.markdown("---")
         st.subheader("Heatmap Penyewaan: Jam vs Kondisi Cuaca")
