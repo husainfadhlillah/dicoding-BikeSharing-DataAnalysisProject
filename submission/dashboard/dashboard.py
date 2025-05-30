@@ -175,12 +175,12 @@ with tab1:
     if not hour_data_filtered.empty:
         col1a, col1b = st.columns(2)
         with col1a:
-            st.subheader("Rata-rata Penyewaan per Jam")
+            st.subheader("Pola Penggunaan Sepeda Berdasarkan Jam")
             hourly_pattern = hour_data_filtered.groupby('hr')['cnt_display'].mean().reset_index()
             if not hourly_pattern.empty:
                 fig_hr, ax_hr = plt.subplots(figsize=(10, 5))
                 sns.lineplot(x='hr', y='cnt_display', data=hourly_pattern, marker='o', linewidth=2, ax=ax_hr, color='dodgerblue')
-                ax_hr.set_title('Rata-rata Penyewaan per Jam', fontsize=15)
+                ax_hr.set_title('Rata-rata Penyewaan Sepeda berdasarkan Jam', fontsize=15)
                 ax_hr.set_xlabel('Jam dalam Sehari', fontsize=12)
                 ax_hr.set_ylabel(f'Rata-rata Penyewaan ({selected_user_type})', fontsize=12)
                 ax_hr.set_xticks(range(0, 24))
@@ -188,14 +188,14 @@ with tab1:
                 st.pyplot(fig_hr)
             else: st.info("Tidak ada data penyewaan per jam untuk filter yang dipilih.")
 
-            st.subheader("Rata-rata Penyewaan per Musim")
+            st.subheader("Pola Penggunaan Sepeda Berdasarkan Musim")
             seasonal_pattern_tab1 = hour_data_filtered.groupby('season_name')['cnt_display'].mean()
             if not seasonal_pattern_tab1.empty:
                 seasonal_pattern_tab1 = seasonal_pattern_tab1.reindex(SEASON_ORDER).dropna().reset_index()
                 if not seasonal_pattern_tab1.empty: # Check again after reindex
                     fig_season_t1, ax_season_t1 = plt.subplots(figsize=(10, 5))
                     sns.barplot(x='season_name', y='cnt_display', data=seasonal_pattern_tab1, palette='viridis', ax=ax_season_t1, order=[s for s in SEASON_ORDER if s in seasonal_pattern_tab1['season_name'].values])
-                    ax_season_t1.set_title('Rata-rata Penyewaan per Musim', fontsize=15)
+                    ax_season_t1.set_title('Rata-rata Penyewaan Sepeda berdasarkan Musim', fontsize=15)
                     ax_season_t1.set_xlabel('Musim', fontsize=12)
                     ax_season_t1.set_ylabel(f'Rata-rata Penyewaan ({selected_user_type})', fontsize=12)
                     ax_season_t1.grid(True, axis='y', linestyle='--', alpha=0.7)
@@ -203,14 +203,14 @@ with tab1:
                 else: st.info("Tidak ada data penyewaan per musim yang valid setelah reindex.")
             else: st.info("Tidak ada data penyewaan per musim untuk filter yang dipilih.")
         with col1b:
-            st.subheader("Rata-rata Penyewaan per Hari dalam Seminggu")
+            st.subheader("Pola Penggunaan Sepeda Berdasarkan Hari dalam Seminggu")
             daily_pattern_weekday = hour_data_filtered.groupby('weekday_name')['cnt_display'].mean()
             if not daily_pattern_weekday.empty:
                 daily_pattern_weekday = daily_pattern_weekday.reindex(WEEKDAY_ORDER).dropna().reset_index()
                 if not daily_pattern_weekday.empty:
                     fig_day, ax_day = plt.subplots(figsize=(10, 5))
                     sns.barplot(x='weekday_name', y='cnt_display', data=daily_pattern_weekday, palette='crest', ax=ax_day, order=[wd for wd in WEEKDAY_ORDER if wd in daily_pattern_weekday['weekday_name'].values])
-                    ax_day.set_title('Rata-rata Penyewaan per Hari', fontsize=15)
+                    ax_day.set_title('Rata-rata Penyewaan Sepeda berdasarkan Hari dalam Seminggu', fontsize=15)
                     ax_day.set_xlabel('Hari', fontsize=12)
                     ax_day.set_ylabel(f'Rata-rata Penyewaan ({selected_user_type})', fontsize=12)
                     plt.setp(ax_day.get_xticklabels(), rotation=30, ha="right")
@@ -219,14 +219,14 @@ with tab1:
                 else: st.info("Tidak ada data penyewaan per hari yang valid setelah reindex.")
             else: st.info("Tidak ada data penyewaan per hari untuk filter yang dipilih.")
 
-            st.subheader("Rata-rata Penyewaan per Bulan")
+            st.subheader("Pola Penggunaan Sepeda Berdasarkan Bulan")
             monthly_pattern = hour_data_filtered.groupby('month_name')['cnt_display'].mean()
             if not monthly_pattern.empty:
                 monthly_pattern = monthly_pattern.reindex(MONTH_ORDER).dropna().reset_index()
                 if not monthly_pattern.empty:
                     fig_month, ax_month = plt.subplots(figsize=(10, 5))
                     sns.lineplot(x='month_name', y='cnt_display', data=monthly_pattern, marker='o', linewidth=2, color='mediumseagreen', sort=False, ax=ax_month)
-                    ax_month.set_title('Rata-rata Penyewaan per Bulan', fontsize=15)
+                    ax_month.set_title('Rata-rata Penyewaan Sepeda berdasarkan Bulan', fontsize=15)
                     ax_month.set_xlabel('Bulan', fontsize=12)
                     ax_month.set_ylabel(f'Rata-rata Penyewaan ({selected_user_type})', fontsize=12)
                     plt.setp(ax_month.get_xticklabels(), rotation=45, ha="right")
@@ -249,8 +249,8 @@ with tab1:
                         if not df_to_plot.empty and not df_to_plot.isnull().all().all():
                             fig_hm_day, ax_hm_day = plt.subplots(figsize=(10, 7))
                             sns.heatmap(df_to_plot, cmap='viridis', annot=False, fmt=".0f", linewidths=.5, cbar_kws={'label': f'Rata-rata Penyewaan ({selected_user_type})'}, ax=ax_hm_day)
-                            ax_hm_day.set_title('Heatmap: Jam vs Hari', fontsize=14)
-                            ax_hm_day.set_xlabel('Hari', fontsize=11); ax_hm_day.set_ylabel('Jam', fontsize=11)
+                            ax_hm_day.set_title('Heatmap Rata-rata Penyewaan Sepeda: Jam vs Hari dalam Seminggu', fontsize=14)
+                            ax_hm_day.set_xlabel('Hari dalam Seminggu', fontsize=11); ax_hm_day.set_ylabel('Hari dalam Seminggu', fontsize=11)
                             st.pyplot(fig_hm_day)
                         else: st.info("Tidak ada data heatmap jam vs hari yang valid untuk filter (setelah reindex).")
                     else: st.info("Tidak ada kolom hari yang relevan dalam data pivot heatmap jam vs hari.")
@@ -267,8 +267,8 @@ with tab1:
                         if not df_to_plot.empty and not df_to_plot.isnull().all().all():
                             fig_hm_month, ax_hm_month = plt.subplots(figsize=(12, 7))
                             sns.heatmap(df_to_plot, cmap='YlGnBu', annot=False, fmt=".0f", linewidths=.5, cbar_kws={'label': f'Rata-rata Penyewaan ({selected_user_type})'}, ax=ax_hm_month)
-                            ax_hm_month.set_title('Heatmap: Jam vs Bulan', fontsize=14)
-                            ax_hm_month.set_xlabel('Bulan', fontsize=11); ax_hm_month.set_ylabel('Jam', fontsize=11)
+                            ax_hm_month.set_title('Heatmap Rata-rata Penyewaan Sepeda: Jam vs Bulan', fontsize=14)
+                            ax_hm_month.set_xlabel('Bulan', fontsize=11); ax_hm_month.set_ylabel('Jam dalam Sehari', fontsize=11)
                             plt.setp(ax_hm_month.get_xticklabels(), rotation=45, ha="right", rotation_mode="anchor")
                             st.pyplot(fig_hm_month)
                         else: st.info("Tidak ada data heatmap jam vs bulan yang valid untuk filter (setelah reindex).")
@@ -287,7 +287,7 @@ with tab1:
                     if not df_to_plot.empty and not df_to_plot.isnull().all().all():
                         fig_hm_season, ax_hm_season = plt.subplots(figsize=(10, 7))
                         sns.heatmap(df_to_plot, cmap='coolwarm', annot=True, fmt=".0f", linewidths=.5, cbar_kws={'label': f'Rata-rata Penyewaan ({selected_user_type})'}, ax=ax_hm_season)
-                        ax_hm_season.set_title('Heatmap: Jam vs Musim', fontsize=16)
+                        ax_hm_season.set_title('Heatmap Rata-rata Penyewaan Sepeda: Jam vs Musim', fontsize=16)
                         ax_hm_season.set_xlabel('Musim', fontsize=14); ax_hm_season.set_ylabel('Jam dalam Sehari', fontsize=14)
                         st.pyplot(fig_hm_season)
                     else: st.info("Tidak ada data heatmap jam vs musim yang valid (setelah reindex).")
@@ -334,8 +334,8 @@ with tab2:
                     if not df_to_plot.empty and not df_to_plot.isnull().all().all():
                         fig_hm_weather, ax_hm_weather = plt.subplots(figsize=(10, 8))
                         sns.heatmap(df_to_plot, cmap='magma_r', annot=True, fmt=".0f", linewidths=.5, cbar_kws={'label': f'Rata-rata Penyewaan ({selected_user_type})'}, ax=ax_hm_weather)
-                        ax_hm_weather.set_title('Heatmap: Jam vs Kondisi Cuaca', fontsize=16)
-                        ax_hm_weather.set_xlabel('Kondisi Cuaca', fontsize=12); ax_hm_weather.set_ylabel('Jam', fontsize=12)
+                        ax_hm_weather.set_title('Heatmap Rata-rata Penyewaan Sepeda: Jam vs Kondisi Cuaca', fontsize=16)
+                        ax_hm_weather.set_xlabel('Kondisi Cuaca', fontsize=12); ax_hm_weather.set_ylabel('Jam dalam Sehari', fontsize=12)
                         plt.setp(ax_hm_weather.get_xticklabels(), rotation=15, ha="right", rotation_mode="anchor")
                         st.pyplot(fig_hm_weather)
                     else: st.info("Tidak ada data heatmap jam vs cuaca yang valid (setelah reindex).")
@@ -441,7 +441,7 @@ with tab4:
             fig_adv.suptitle(f'Karakteristik Penyewaan Sepeda per Segmen Waktu Harian ({selected_user_type})', fontsize=18, y=1.02)
 
             sns.barplot(x=time_of_day_analysis_df.index, y='avg_total_users', data=time_of_day_analysis_df, ax=axes[0,0], palette='Blues_r', order=[t for t in TIME_OF_DAY_ORDER if t in time_of_day_analysis_df.index])
-            axes[0,0].set_title('Rata-rata Total Penyewaan', fontsize=14); axes[0,0].set_xlabel('Segmen Waktu', fontsize=12); axes[0,0].set_ylabel(f'Rata-rata Penyewaan ({selected_user_type})', fontsize=12)
+            axes[0,0].set_title('Rata-rata Total Penyewaan per Segmen Waktu', fontsize=14); axes[0,0].set_xlabel('time_of_day', fontsize=12); axes[0,0].set_ylabel(f'Rata-rata Penyewaan ({selected_user_type})', fontsize=12)
             plt.setp(axes[0,0].get_xticklabels(), rotation=20, ha="right", rotation_mode="anchor")
             axes[0,0].grid(True, axis='y', linestyle='--', alpha=0.7)
 
@@ -454,12 +454,12 @@ with tab4:
                 else: axes[0,1].text(0.5, 0.5, 'Data pengguna tidak cukup', ha='center', va='center', transform=axes[0,1].transAxes)
             else:
                 axes[0,1].text(0.5, 0.5, f'Menampilkan data untuk\n{selected_user_type}', ha='center', va='center', transform=axes[0,1].transAxes, fontsize=12)
-            axes[0,1].set_title('Rata-rata Penyewaan per Tipe Pengguna', fontsize=14); axes[0,1].set_xlabel('Segmen Waktu', fontsize=12); axes[0,1].set_ylabel('Rata-rata Jumlah Penyewaan', fontsize=12)
+            axes[0,1].set_title('Rata-rata Pengguna Casual vs Registered per Segmen Waktu', fontsize=14); axes[0,1].set_xlabel('time_of_day', fontsize=12); axes[0,1].set_ylabel('Rata-rata Penyewaan (Semua)', fontsize=12)
             plt.setp(axes[0,1].get_xticklabels(), rotation=20, ha="right", rotation_mode="anchor")
             axes[0,1].grid(True, axis='y', linestyle='--', alpha=0.7)
 
             sns.barplot(x=time_of_day_analysis_df.index, y='avg_temp_actual', data=time_of_day_analysis_df, ax=axes[1,0], palette='Oranges_r', order=[t for t in TIME_OF_DAY_ORDER if t in time_of_day_analysis_df.index])
-            axes[1,0].set_title('Rata-rata Suhu Aktual (°C)', fontsize=14); axes[1,0].set_xlabel('Segmen Waktu', fontsize=12); axes[1,0].set_ylabel('Rata-rata Suhu (°C)', fontsize=12)
+            axes[1,0].set_title('Rata-rata Suhu Aktual (°C) per Segmen Waktu', fontsize=14); axes[1,0].set_xlabel('time_of_day', fontsize=12); axes[1,0].set_ylabel('Rata-rata Suhu (°C)', fontsize=12)
             plt.setp(axes[1,0].get_xticklabels(), rotation=20, ha="right", rotation_mode="anchor")
             axes[1,0].grid(True, axis='y', linestyle='--', alpha=0.7)
 
@@ -470,7 +470,7 @@ with tab4:
                 weather_proportions_by_time = weather_counts_by_time.apply(lambda x: x / x.sum() * 100 if x.sum() > 0 else x, axis=1).reindex(TIME_OF_DAY_ORDER).dropna(how='all')
                 if not weather_proportions_by_time.empty and not weather_proportions_by_time.isnull().all().all():
                     weather_proportions_by_time.plot(kind='bar', stacked=True, ax=axes[1,1], colormap='Spectral', width=0.8)
-                    axes[1,1].set_title('Proporsi Kondisi Cuaca (%)', fontsize=14); axes[1,1].set_xlabel('Segmen Waktu', fontsize=12); axes[1,1].set_ylabel('Persentase (%)', fontsize=12)
+                    axes[1,1].set_title('Proporsi Kondisi Cuaca (%) per Segmen Waktu', fontsize=14); axes[1,1].set_xlabel('time_of_day', fontsize=12); axes[1,1].set_ylabel('Persentase (%)', fontsize=12)
                     plt.setp(axes[1,1].get_xticklabels(), rotation=20, ha="right", rotation_mode="anchor")
                     axes[1,1].legend(title='Kondisi Cuaca', bbox_to_anchor=(1.05, 1), loc='upper left', fontsize='small'); axes[1,1].grid(True, axis='y', linestyle='--', alpha=0.7)
                 else: axes[1,1].text(0.5, 0.5, 'Tidak ada data proporsi cuaca', ha='center', va='center', transform=axes[1,1].transAxes)
